@@ -56,7 +56,7 @@ const Salons = () => {
             <Home>
                 <Header>
                     <h1>NailsReview</h1>
-                    <Subheader>Your opinion for local nail salons.</Subheader>
+                    <Subheader>Your opinion of local nail salons.</Subheader>
                 </Header>
                 <Grid>
                     {grid}

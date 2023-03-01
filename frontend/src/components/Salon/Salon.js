@@ -1,7 +1,30 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import Header from './Header'
+import styled from 'styled-components'
+import ReviewForm from './ReviewForm'
+
+const Wrapper = styled.div`
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+`
+
+const Column = styled.div`
+    background: #fff;
+    height: 100vh;
+    overflow: scroll;
+
+    &:last-child {
+        background: #000;
+    }
+`
+
+const Main = styled.div`
+    padding-left: 50px;
+`
 
 const Salon = () => {
     const { slug } = useParams()
@@ -23,21 +46,57 @@ const Salon = () => {
         .catch( resp => console.log(resp) )
     }, [])
 
+    const handleChange = (e) => {
+        e.preventDefault()
+
+        setReview(Object.assign({}, review, {[e.target.name]: e.target.value}))
+
+        console.log('review', review)
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+
+        const csrfToken = document.querySelector("[name=csrf-token]")
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
+
+        const salon_id = salon.data.id 
+        axios.post('http://localhost:3000/api/v1/reviews', {review, salon_id})
+        .then( resp => {
+            const included = [...salon.included, resp.data.data]
+            setSalon({...salon, included})
+            setReview({title: '', description: '', score: 0})
+        })
+        .catch( resp => {})
+
+    }
+
 
     return (
-        <div className="wrapper">
-            <div className="column">
-                { loaded && 
-                <Header 
-                    attributes={salon.data.attributes}
-                    reviews={salon.included}
-                /> }
-                <div className="reviews"></div>
-            </div>
-            <div className="column">
-                <div className="review-form">[Review form goes here.]</div>
-            </div>
-        </div>
+        <Wrapper>                    
+            { 
+                loaded && 
+                    <Fragment>
+                        <Column>
+                                <Main>
+                                    <Header 
+                                        attributes={salon.data.attributes}
+                                        reviews={salon.included}
+                                    /> 
+                                    <div className="reviews"></div>
+                                </Main>
+                            </Column>
+                            <Column>
+                                <ReviewForm
+                                    handleChange={handleChange}
+                                    handleSubmit={handleSubmit}
+                                    attributes={salon.data.attributes}
+                                    review={review}
+                                />
+                            </Column>
+                    </Fragment>
+            }
+        </Wrapper>
     )
 }
 

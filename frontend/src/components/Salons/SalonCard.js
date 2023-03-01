@@ -5,7 +5,7 @@ import styled from 'styled-components'
 const Card = styled.div`
     border: 1px solid #efefef;
     background: #fff;
-    text-align: cetner;
+    text-align: center;
 `
 const SalonLogo = styled.div`
     width: 50px

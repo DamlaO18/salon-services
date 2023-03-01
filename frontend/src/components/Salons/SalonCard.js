@@ -1,10 +1,10 @@
 import React from 'react'
-import { BrowserRouter as Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 const Card = styled.div`
     border: 1px solid #efefef;
-    background: #ffff;
+    background: #fff;
     text-align: cetner;
 `
 const SalonLogo = styled.div`
@@ -22,7 +22,8 @@ const SalonLogo = styled.div`
     }
 `
 const SalonName = styled.div`
-    padding: 20px 0 10px 0
+    padding: 20px 0 10px 0;
+    padding-bottom: 10px;
 `
 const LinkWrapper = styled.div`
     margin: 30px 0 20px 0
@@ -33,18 +34,19 @@ const LinkWrapper = styled.div`
         background: #000;
         border-radius: 4px;
         padding: 10px 50px;
+        padding-top: 10px;
         border: 1px solid #000;
         width: 100%;
         text-decoration: none;
     }
 `
 
-const Salon = (props) => {
+const SalonCard = (props) => {
     return (
         <div>
             <Card>
                 <SalonLogo>
-                    <img src={props.attributes.image_url} alt={props.attributes.name}/>
+                    <img src= "/salon-img.webp" alt={props.attributes.name}/>
                 </SalonLogo>
                 <SalonName>{props.attributes.name}</SalonName>
                 <div className="salon-score">{props.attributes.avg_score}</div>
@@ -56,4 +58,4 @@ const Salon = (props) => {
     )
 }
 
-export default Salon
+export default SalonCard

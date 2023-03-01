@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import Salon from './Salon'
+// import Salon from './SalonCard'
 import styled from 'styled-components'
+import SalonCard from './SalonCard'
 
 const Home = styled.div`
     text-align: center;
@@ -32,7 +33,7 @@ const Salons = () => {
     const [salons, setSalons] = useState([])
 
     useEffect(()=> {
-        axios.get('/api/v1/salons.json')
+        axios.get('http://localhost:3000/api/v1/salons.json')
         .then( resp => setSalons(resp.data.data) )
         .catch( resp => console.log(resp) )
     }, [salons.length])
@@ -40,7 +41,7 @@ const Salons = () => {
 
     const grid = salons.map( item => {
         return (
-            <Salon 
+            <SalonCard 
             key={item.attributes.name}
             attributes={item.attributes}
             />
@@ -55,7 +56,7 @@ const Salons = () => {
             <Home>
                 <Header>
                     <h1>NailsReview</h1>
-                    <Subheader>Honest, unbiased nail salon review.</Subheader>
+                    <Subheader>Your opinion for local nail salons.</Subheader>
                 </Header>
                 <Grid>
                     {grid}

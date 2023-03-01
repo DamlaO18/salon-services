@@ -4,7 +4,7 @@
 salons = Salon.create([
     {
         name: "Vescada Nails",
-        image_url: "https://images.app.goo.gl/c2sPSYQTwbYVLfYB9"
+        image_url: "https://images.app.goo.gl/wwD4sGkCgtwRfGRi9"
     },
     {
         name: "Vanity Nails",

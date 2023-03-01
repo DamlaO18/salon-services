@@ -8,6 +8,10 @@ class Salon < ApplicationRecord
     end
 
     def avg_score
-        reviews.average(score).round(2).to_f
+        if reviews.length >=1 
+            reviews.average(:score).round(2).to_f
+        else
+            0
+        end
     end
 end

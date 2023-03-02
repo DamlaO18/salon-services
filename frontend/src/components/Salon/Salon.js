@@ -71,6 +71,12 @@ const Salon = () => {
 
     }
 
+    const setRating = (score, e) => {
+        e.preventDefault()
+        
+        setReview({...review, score})
+    }
+
 
     return (
         <Wrapper>                    
@@ -90,8 +96,10 @@ const Salon = () => {
                                 <ReviewForm
                                     handleChange={handleChange}
                                     handleSubmit={handleSubmit}
+                                    setRating={setRating}
                                     attributes={salon.data.attributes}
                                     review={review}
+                                    
                                 />
                             </Column>
                     </Fragment>

@@ -128,7 +128,7 @@ const ReviewForm = (props) => {
 
     return (
         <Wrapper>
-            <form onSubmit={props.handleSubmit}>
+            <form>
                 <Headline>Have an experience with {props.attributes.name}? Share your review</Headline>
                 <Field>
                     <input onChange={props.handleChange} value={props.review.title} type="text" name="title" placeholder="Review Title"></input>
@@ -144,9 +144,30 @@ const ReviewForm = (props) => {
                         </RatingBox>
                     </RatingContainer>
                 </Field>
-                <SubmitBtn type="submit">Submit Your Review</SubmitBtn>
+                <SubmitBtn type="submit" onClick={props.handleSubmit}>Submit Your Review</SubmitBtn>
             </form>
         </Wrapper>
+
+    //     <div className="wrapper">
+    //     <form onSubmit={props.handleSubmit}>
+    //         <div className="headline">Have an experience with {props.attributes.name}? Share your review</div>
+    //         <div className="field">
+    //             <input onChange={props.handleChange} value={props.review.title} type="text" name="title" placeholder="Review Title"></input>
+    //         </div>
+    //         <div className="field">
+    //             <input onChange={props.handleChange} value={props.review.description} type="text" name="description" placeholder="Review Description"></input>
+    //         </div>
+    //         <div className="field">
+    //             <div className="rating-container">
+    //                 <div className="rating-title">Rate This Salon</div>
+    //                 <div className="rating-box">
+    //                     {ratingOptions}
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         <button type="submit" onClick={()=>console.log('clicked')}>Submit Your Review</button>
+    //     </form>
+    // </div>
     )
 }
 

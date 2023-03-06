@@ -4,6 +4,7 @@ import axios from 'axios'
 import Header from './Header'
 import styled from 'styled-components'
 import ReviewForm from './ReviewForm'
+import AxiosWrapper from '@gravity-ui/axios-wrapper'
 
 const Wrapper = styled.div`
     margin-left: auto;
@@ -31,13 +32,13 @@ const Salon = () => {
     const [salon, setSalon] = useState({})
     const [review, setReview] = useState({title: '', description: '', score: 0})
     const [loaded, setLoaded] = useState(false)
+    const [reviews, setReviews] = useState([])
 
     useEffect(() => {
         
         
         axios.get(`http://localhost:3000/api/v1/salons/${slug}`)
-        .then( resp => 
-            {
+        .then( resp => {
             setSalon(resp.data) 
             setLoaded(true)
         }
@@ -61,7 +62,7 @@ const Salon = () => {
         axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
 
         const salon_id = salon.data.id 
-        axios.post('http://localhost:3000/api/v1/reviews', {review, salon_id})
+        axios.post('http://localhost:3000/api/v1/reviews', {...review, salon_id})
         .then( resp => {
             const included = [...salon.included, resp.data.data]
             setSalon({...salon, included})
@@ -70,6 +71,20 @@ const Salon = () => {
         .catch( resp => {})
 
     }
+
+    const handleDestroy = (id, e) => {
+        e.preventDefault()
+    
+        AxiosWrapper.delete(`/api/v1/reviews/${id}`)
+        .then( (data) => {
+          const included = [...reviews]
+          const index = included.findIndex( (data) => data.id === id )
+          included.splice(index, 1)
+    
+          setReviews(included)
+        })
+        .catch( data => console.log('Error', data) )
+      }
 
     const setRating = (score, e) => {
         e.preventDefault()

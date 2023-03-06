@@ -1,4 +1,4 @@
-import React, { Fragment, startTransition } from 'react'
+import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import blankstar from './Stars/blankstar.png'
 import hoverstar from './Stars/hoverstar.png'
@@ -84,13 +84,12 @@ const Wrapper = styled.div`
 `
 
 const SubmitBtn = styled.div`
-    background: #fff;
+    background: #0BDA51;
     border-radius: 4px;
     padding: 12px;
     font-size: 18px;
     cursor: pointer;
     transition: ease-in-out 0.1s;
-    border: 1px solid #000;
     width: 95%;
     margin-top: 20px;
     text-align: center;
@@ -98,7 +97,6 @@ const SubmitBtn = styled.div`
     &:hover {
         background: #000;
         color: #fff;
-        border: 1px solid #fff;
     }
 `
 
@@ -120,7 +118,7 @@ const ReviewForm = (props) => {
     const ratingOptions = [5, 4, 3, 2, 1].map( (score, index) => {
         return (
             <Fragment> 
-                <input type="radio" value={score}  checked={props.review.score == score} onChange={()=>console.log('onChange')} name="rating" id={`rating${score}`}></input>
+                <input type="radio" value={score}  checked={props.review.score === score} onChange={()=>console.log('onChange')} name="rating" id={`rating${score}`}></input>
                 <label onClick={props.setRating.bind(this, score)}></label>
             </Fragment> 
         )
@@ -148,26 +146,6 @@ const ReviewForm = (props) => {
             </form>
         </Wrapper>
 
-    //     <div className="wrapper">
-    //     <form onSubmit={props.handleSubmit}>
-    //         <div className="headline">Have an experience with {props.attributes.name}? Share your review</div>
-    //         <div className="field">
-    //             <input onChange={props.handleChange} value={props.review.title} type="text" name="title" placeholder="Review Title"></input>
-    //         </div>
-    //         <div className="field">
-    //             <input onChange={props.handleChange} value={props.review.description} type="text" name="description" placeholder="Review Description"></input>
-    //         </div>
-    //         <div className="field">
-    //             <div className="rating-container">
-    //                 <div className="rating-title">Rate This Salon</div>
-    //                 <div className="rating-box">
-    //                     {ratingOptions}
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //         <button type="submit" onClick={()=>console.log('clicked')}>Submit Your Review</button>
-    //     </form>
-    // </div>
     )
 }
 

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import Salon from '../Salon/Salon'
 import styled from 'styled-components'
 import SalonCard from './SalonCard'
 

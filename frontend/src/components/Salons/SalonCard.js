@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import Rating from '../Salon/Rating/Rating'
 
 const Card = styled.div`
     border: 1px solid #efefef;
@@ -25,9 +26,11 @@ const SalonName = styled.div`
     padding: 20px 0 10px 0;
     padding-bottom: 10px;
 `
+
 const LinkWrapper = styled.div`
     margin: 30px 0 20px 0
     height: 50px;
+    padding-top: 20px;
 
     a {
         color: #fff;
@@ -49,7 +52,7 @@ const SalonCard = (props) => {
                     <img src= "/salon-img.webp" alt={props.attributes.name}/>
                 </SalonLogo>
                 <SalonName>{props.attributes.name}</SalonName>
-                <div className="salon-score">{props.attributes.avg_score}</div>
+                <Rating score={props.attributes.avg_score} />
                 <LinkWrapper>
                     <Link to={`/salons/${props.attributes.slug}`}>View Salon</Link>
                 </LinkWrapper>

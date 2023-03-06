@@ -4,6 +4,7 @@ import axios from 'axios'
 import Header from './Header'
 import styled from 'styled-components'
 import ReviewForm from './ReviewForm'
+import Review from './Review'
 import AxiosWrapper from '@gravity-ui/axios-wrapper'
 
 const Wrapper = styled.div`
@@ -32,7 +33,7 @@ const Salon = () => {
     const [salon, setSalon] = useState({})
     const [review, setReview] = useState({title: '', description: '', score: 0})
     const [loaded, setLoaded] = useState(false)
-    const [reviews, setReviews] = useState([])
+
 
     useEffect(() => {
         
@@ -61,8 +62,8 @@ const Salon = () => {
         const csrfToken = document.querySelector("[name=csrf-token]")
         axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
 
-        const salon_id = salon.data.id 
-        axios.post('http://localhost:3000/api/v1/reviews', {...review, salon_id})
+        const salon_id = parseInt(salon.data.id)
+        axios.post('http://localhost:3000/api/v1/reviews', {review, salon_id})
         .then( resp => {
             const included = [...salon.included, resp.data.data]
             setSalon({...salon, included})
@@ -72,19 +73,19 @@ const Salon = () => {
 
     }
 
-    const handleDestroy = (id, e) => {
-        e.preventDefault()
+    // const handleDestroy = (id, e) => {
+    //     e.preventDefault()
     
-        AxiosWrapper.delete(`/api/v1/reviews/${id}`)
-        .then( (data) => {
-          const included = [...reviews]
-          const index = included.findIndex( (data) => data.id === id )
-          included.splice(index, 1)
+    //     AxiosWrapper.delete(`/api/v1/reviews/${id}`)
+    //     .then( (data) => {
+    //       const included = [...reviews]
+    //       const index = included.findIndex( (data) => data.id === id )
+    //       included.splice(index, 1)
     
-          setReviews(included)
-        })
-        .catch( data => console.log('Error', data) )
-      }
+    //       setReviews(included)
+    //     })
+    //     .catch( data => console.log('Error', data) )
+    //   }
 
     const setRating = (score, e) => {
         e.preventDefault()
@@ -92,6 +93,17 @@ const Salon = () => {
         setReview({...review, score})
     }
 
+    let reviews 
+    if (loaded && salon.included) {
+        reviews = salon.included.map( (item, index) => {
+            return(
+                <Review 
+                    key={index}
+                    attributes={item.attributes}
+                />
+            )
+        } ) 
+    }
 
     return (
         <Wrapper>                    
@@ -104,7 +116,7 @@ const Salon = () => {
                                         attributes={salon.data.attributes}
                                         reviews={salon.included}
                                     /> 
-                                    <div className="reviews"></div>
+                                    {reviews}
                                 </Main>
                             </Column>
                             <Column>

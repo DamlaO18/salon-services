@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import Header from './Header'
 import styled from 'styled-components'
-import ReviewForm from './ReviewForm'
 import Review from './Review'
+import ReviewForm from './ReviewForm'
 import AxiosWrapper from '@gravity-ui/axios-wrapper'
 
 const Wrapper = styled.div`
@@ -33,19 +33,21 @@ const Salon = () => {
     const [salon, setSalon] = useState({})
     const [review, setReview] = useState({title: '', description: '', score: 0})
     const [loaded, setLoaded] = useState(false)
+    const [reviews, setReviews] = useState([])
 
 
     useEffect(() => {
         
-        
         axios.get(`http://localhost:3000/api/v1/salons/${slug}`)
-        .then( resp => {
+        .then( resp => 
+            {
             setSalon(resp.data) 
+            setReviews(resp.data.included)
             setLoaded(true)
         }
         
         )
-        .catch( resp => console.log(resp) )
+        .catch( data => console.log('Error', data) )
     }, [])
 
     const handleChange = (e) => {
@@ -62,7 +64,7 @@ const Salon = () => {
         const csrfToken = document.querySelector("[name=csrf-token]")
         axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
 
-        const salon_id = parseInt(salon.data.id)
+        const salon_id = salon.data.id
         axios.post('http://localhost:3000/api/v1/reviews', {review, salon_id})
         .then( resp => {
             const included = [...salon.included, resp.data.data]
@@ -73,19 +75,19 @@ const Salon = () => {
 
     }
 
-    // const handleDestroy = (id, e) => {
-    //     e.preventDefault()
+    const handleDestroy = (id, e) => {
+        e.preventDefault()
     
-    //     AxiosWrapper.delete(`/api/v1/reviews/${id}`)
-    //     .then( (data) => {
-    //       const included = [...reviews]
-    //       const index = included.findIndex( (data) => data.id === id )
-    //       included.splice(index, 1)
+        axios.delete(`http://localhost:3000/api/v1/reviews/${id}`)
+        .then( (data) => {
+          const included = [...reviews]
+          const index = included.findIndex( (data) => data.id === id )
+          included.splice(index, 1)
     
-    //       setReviews(included)
-    //     })
-    //     .catch( data => console.log('Error', data) )
-    //   }
+          setReviews(included)
+        })
+        .catch( data => console.log('Error', data) )
+      }
 
     const setRating = (score, e) => {
         e.preventDefault()
@@ -93,17 +95,37 @@ const Salon = () => {
         setReview({...review, score})
     }
 
-    let reviews 
-    if (loaded && salon.included) {
-        reviews = salon.included.map( (item, index) => {
+
+    let total, average = 0
+    let userReviews 
+    if (reviews && reviews.length > 0) {
+        total = reviews.reduce((total, review) => total + review.attributes.score, 0)
+        average = total > 0 ? (parseFloat(total) / parseFloat(reviews.length)) : 0
+
+        userReviews = salon.included.map( (item, index) => {
             return(
                 <Review 
                     key={index}
+                    id={review.id}
                     attributes={item.attributes}
+                    handleDestroy={handleDestroy}
                 />
             )
         } ) 
     }
+
+    // let userReviews 
+    // if (loaded && salon.included) {
+    //     userReviews = salon.included.map( (item, index) => {
+    //         return(
+    //             <Review 
+    //                 key={index}
+    //                 attributes={item.attributes}
+    //             />
+    //         )
+    //     } ) 
+    // }
+
 
     return (
         <Wrapper>                    
@@ -114,19 +136,20 @@ const Salon = () => {
                                 <Main>
                                     <Header 
                                         attributes={salon.data.attributes}
-                                        reviews={salon.included}
+                                        reviews={reviews}
+                                        average={average}
                                     /> 
-                                    {reviews}
+                                    {userReviews}
                                 </Main>
                             </Column>
                             <Column>
                                 <ReviewForm
+                                    name={salon.data.attributes.name}
+                                    review={review}
                                     handleChange={handleChange}
                                     handleSubmit={handleSubmit}
                                     setRating={setRating}
                                     attributes={salon.data.attributes}
-                                    review={review}
-                                    
                                 />
                             </Column>
                     </Fragment>

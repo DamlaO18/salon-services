@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_27_081826) do
+ActiveRecord::Schema.define(version: 2023_03_11_020202) do
 
   create_table "reviews", force: :cascade do |t|
     t.string "title"
@@ -19,7 +19,9 @@ ActiveRecord::Schema.define(version: 2023_02_27_081826) do
     t.integer "salon_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "user_id"
     t.index ["salon_id"], name: "index_reviews_on_salon_id"
+    t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 
   create_table "salons", force: :cascade do |t|
@@ -30,5 +32,15 @@ ActiveRecord::Schema.define(version: 2023_02_27_081826) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "email"
+    t.string "password_digest"
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   add_foreign_key "reviews", "salons"
+  add_foreign_key "reviews", "users"
 end

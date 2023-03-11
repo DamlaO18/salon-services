@@ -4,7 +4,9 @@ module Api
             protect_from_forgery with: :null_session
 
             def create
-                review = salon.reviews.new(review_params)
+                review = salon.reviews.build(review_params)
+                review.salon_id = params[:salon_id]
+                review.user_id = params[:user_id]
 
                 if review.save
                     render json: ReviewSerializer.new(review).serialized_json
@@ -14,7 +16,7 @@ module Api
             end
 
             def destroy
-                review = Review.find_by(params[:id])
+                review = Review.find_by(id:params[:id])
 
                 if review.destroy
                     head :no_content
@@ -26,7 +28,7 @@ module Api
             private 
 
             def salon 
-                @salon ||= Salon.find_by(params[:salon_id])
+                @salon = Salon.find_by(id:params[:salon_id])
             end
 
             def review_params

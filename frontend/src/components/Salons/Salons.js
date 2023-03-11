@@ -41,7 +41,7 @@ const Salons = () => {
     const grid = salons.map( item => {
         return (
             <SalonCard 
-            key={item.attributes.name}
+            key={item.attributes.id}
             attributes={item.attributes}
             />
         )

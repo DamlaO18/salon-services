@@ -65,7 +65,7 @@ const Salon = () => {
         axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
 
         const salon_id = salon.data.id
-        axios.post('http://localhost:3000/api/v1/reviews', {review, salon_id})
+        axios.post('http://localhost:3000/api/v1/reviews', {review, salon_id, user_id:1})
         .then( resp => {
             const included = [...salon.included, resp.data.data]
             setSalon({...salon, included})

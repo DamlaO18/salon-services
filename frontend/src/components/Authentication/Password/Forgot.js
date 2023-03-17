@@ -1,10 +1,8 @@
-import React, { useState }  from 'react'
-import { AuthConsumer, AuthProvider } from '../AuthContext'
-import { Link } from 'react-router-dom'
+import React, { Component, useEffect, useState }  from 'react'
+import { AuthConsumer } from '../../AuthContext'
 import styled from 'styled-components'
-import Forgot from './Password/Forgot'
 
-const LoginWrapper = styled.div``
+
 const FormWrapper = styled.div`
   margin-top:50px;
 `
@@ -44,7 +42,7 @@ const Input = styled.input`
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
 `
-const LoginButton = styled.button`
+const ForgotPassButton = styled.button`
   position: relative;
   display: inline-block;
   padding: 6px 12px;
@@ -65,34 +63,24 @@ const Field = styled.div`
   width: 100%;
 `
 
-const Login = (props) => {
+const Forgot = (props) => {
   const [user, setUser] = useState({ email: '', password: '' })
-  // const handleChange = (e) => setUser({ [e.target.name]: e.target.value })
-  const handleChangeEmail = (e) => setUser({...user, email: e.target.value})
-  const handleChangePassword = (e) => setUser({...user, password: e.target.value})
-
+  const handleChange = (e) => setUser({ ...user, [e.target.name]: e.target.value })
 
   return (
     <AuthConsumer>
-      { ({ isAuth, login }) => (
+      { ({ forgotPass }) => (
         <div>
           <FormWrapper>
             <FormContainer>
-              <AuthProvider>
-                <Form onSubmit={login.bind(this, user, props)}>
-                  <h1>Log In</h1>
-                  <Field>
-                    <label>Email</label>
-                    <Input onChange={handleChangeEmail} type="email" value={user.email} placeholder="email" name="email"/>
-                  </Field>
-                  <Field>
-                    <label>Password</label>
-                    <Input onChange={handleChangePassword} type="password"value={user.password} placeholder="password" name="password"/>
-                  </Field>
-                  <LoginButton type="submit">Login</LoginButton>
-                  <li><Link to="/forgot-password">Forgot your password?</Link></li>
-                </Form>
-              </AuthProvider>
+              <Form onSubmit={forgotPass.bind(this, user, props)}>
+                <h1>Forgot Password</h1>
+                <Field>
+                  <label>Email</label>
+                  <Input onChange={handleChange} type="email" value={user.email} placeholder="email" name="email"/>
+                </Field>
+                <ForgotPassButton type="submit">ForgotPass</ForgotPassButton>
+              </Form>   
             </FormContainer>
           </FormWrapper>
         </div>
@@ -101,4 +89,4 @@ const Login = (props) => {
   )
 }
 
-export default Login
+export default Forgot

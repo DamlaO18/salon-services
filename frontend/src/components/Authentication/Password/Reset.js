@@ -1,8 +1,6 @@
-import React, { useState }  from 'react'
-import { AuthConsumer, AuthProvider } from '../AuthContext'
-import { Link } from 'react-router-dom'
+import React, { Component, useEffect, useState }  from 'react'
+import { AuthConsumer } from '../../AuthContext'
 import styled from 'styled-components'
-import Forgot from './Password/Forgot'
 
 const LoginWrapper = styled.div``
 const FormWrapper = styled.div`
@@ -65,34 +63,31 @@ const Field = styled.div`
   width: 100%;
 `
 
-const Login = (props) => {
+const Reset = (props) => {
   const [user, setUser] = useState({ email: '', password: '' })
-  // const handleChange = (e) => setUser({ [e.target.name]: e.target.value })
-  const handleChangeEmail = (e) => setUser({...user, email: e.target.value})
-  const handleChangePassword = (e) => setUser({...user, password: e.target.value})
+  const [token, setToken] = useState('')
+  const handleChange = (e) => setUser({ ...user, [e.target.name]: e.target.value })
 
+  useEffect( ()=> {
+    // TODO: Clean this up
+    const token = props.location.search.split('token=')[1].split('&')[0]
+    setToken(token)
+  }, [])
 
   return (
     <AuthConsumer>
-      { ({ isAuth, login }) => (
+      { ({ resetPass }) => (
         <div>
           <FormWrapper>
             <FormContainer>
-              <AuthProvider>
-                <Form onSubmit={login.bind(this, user, props)}>
-                  <h1>Log In</h1>
-                  <Field>
-                    <label>Email</label>
-                    <Input onChange={handleChangeEmail} type="email" value={user.email} placeholder="email" name="email"/>
-                  </Field>
-                  <Field>
-                    <label>Password</label>
-                    <Input onChange={handleChangePassword} type="password"value={user.password} placeholder="password" name="password"/>
-                  </Field>
-                  <LoginButton type="submit">Login</LoginButton>
-                  <li><Link to="/forgot-password">Forgot your password?</Link></li>
-                </Form>
-              </AuthProvider>
+              <Form onSubmit={resetPass.bind(this, user, token)}>
+                <h1>Reset Password</h1>
+                <Field>
+                  <label>New Password</label>
+                  <Input onChange={handleChange} type="password" value={user.password} placeholder="password" name="password"/>
+                </Field>
+                <button type="submit">Save Password</button>
+              </Form>   
             </FormContainer>
           </FormWrapper>
         </div>
@@ -101,4 +96,4 @@ const Login = (props) => {
   )
 }
 
-export default Login
+export default Reset

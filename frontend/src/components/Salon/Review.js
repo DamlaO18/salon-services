@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Rating from './Rating/Rating'
+import { AuthConsumer } from '../AuthContext'
 
 const Card = styled.div`
     border: 1px solid rgba(0,0,0,0.1);

@@ -1,21 +1,22 @@
-import React, {Component, createContext} from 'react'
+import React, {Component, createContext, useState} from 'react'
 import axios from 'axios'
 import Authenticate from '../utils/Auth/Authenticate'
 
 const AuthContext = createContext()
 
 class AuthProvider extends Component {
-  state = { isAuth: false, email: '' }
+  // state = { isAuth: false, email: '' }
 
   constructor(props){
     super(props)
+    this.state = { isAuth: false, email: '', }
   }
 
-  componentDidMount(){
-    Authenticate()
-    .then( (resp) => this.setState({ ...resp }) )
-    .catch( err => console.log(err))
-  }
+  // componentDidMount(){
+  //   Authenticate()
+  //   .then( (resp) => this.setState({ ...resp }) )
+  //   .catch( err => console.log(err))
+  // }
 
   login = (user, props, e) => {
     e.preventDefault()
@@ -24,6 +25,7 @@ class AuthProvider extends Component {
     .then( _resp => {
       this.setState({ isAuth: true })
       props.history.push("/")
+      window.location.href = "http://localhost:4000/salons"
     })
     .catch( err => console.log(err))
   }
@@ -31,7 +33,7 @@ class AuthProvider extends Component {
   signup = (user, props, e) => {
     e.preventDefault()
 
-    axios.post('http://localhost:3000/api/v1/registrations', { user: { ...user } }, { withCredentials: true })
+    axios.post('http://localhost:3000/api/v1/auth/registrations', {...user }, { withCredentials: true })
     .then( resp => {
       this.setState({ isAuth: true })
       props.history.push("/")
@@ -66,8 +68,9 @@ class AuthProvider extends Component {
 
     axios.delete('http://localhost:3000/api/v1/auth/logout')
     .then( _resp => {
+      console.log(_resp.logged_in)
       this.setState({ isAuth: false })
-      window.location.href = '/'
+      // window.location.href = "/salons"
     })
     .catch( err => console.log(err))
   }

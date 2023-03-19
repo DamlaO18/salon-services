@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { AuthConsumer } from '../AuthContext'
+import { AuthConsumer, AuthProvider } from '../AuthContext'
 import styled from 'styled-components'
 
 const Register = (props) => {
     const [user, setUser] = useState({ email: '', password: ''})
-    const handleChange = (e) => setUser({...user, [e.target.name]: e.target.value})
-
+    const handleChangeEmail = (e) => setUser({...user, email: e.target.value})
+    const handleChangePassword = (e) => setUser({...user, password: e.target.value})
 const SignUpWrapper = styled.div``
 
 const FormWrapper = styled.div`
@@ -74,18 +74,20 @@ const Field = styled.div`
                 <div className="signup-wrapper">
                     <FormWrapper>
                         <FormContainer>
-                            <Form onSubmit={signup.bind(this, user, props)}>
-                                <h1>Sign Up</h1>
-                                <Field>
-                                    <label>Email</label>
-                                    <Input onChange={handleChange} type="email" value={user.email} placeholder="email" name="email"/>
-                                </Field>
-                                <Field>
-                                    <label>Password</label>
-                                    <Input onChange={handleChange} type="password" value={user.password} placeholder="password" name="password"/>
-                                </Field>
-                                <LoginButton type="submit">Sign Up</LoginButton>
-                            </Form>
+                            <AuthProvider>
+                                <Form onSubmit={signup.bind(this, user, props)}>
+                                    <h1>Sign Up</h1>
+                                    <Field>
+                                        <label>Email</label>
+                                        <Input onChange={handleChangeEmail} type="email" value={user.email} placeholder="email" name="email"/>
+                                    </Field>
+                                    <Field>
+                                        <label>Password</label>
+                                        <Input onChange={handleChangePassword} type="password" value={user.password} placeholder="password" name="password"/>
+                                    </Field>
+                                    <LoginButton type="submit">Sign Up</LoginButton>
+                                </Form>
+                            </AuthProvider>
                         </FormContainer>
                     </FormWrapper>
                 </div>

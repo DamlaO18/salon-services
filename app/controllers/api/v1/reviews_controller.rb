@@ -6,7 +6,6 @@ module Api
             def create
                 review = salon.reviews.build(review_params)
                 review.salon_id = params[:salon_id]
-                review.user_id = params[:user_id]
 
                 if review.save
                     render json: ReviewSerializer.new(review).serialized_json
@@ -32,7 +31,7 @@ module Api
             end
 
             def review_params
-                params.require(:review).permit(:title, :description, :score, :salon_id)
+                params.require(:review).permit(:title, :description, :score, :salon_id, :user_id)
             end
         end
     end

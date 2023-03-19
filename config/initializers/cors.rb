@@ -5,7 +5,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
       resource '*',
         headers: :any,
         credentials: true,
-        methods: [:get, :post, :options]
+        methods: [:get, :post, :delete, :options]
       
     end
   end

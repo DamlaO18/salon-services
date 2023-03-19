@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { AuthConsumer } from './AuthContext'
+import { AuthConsumer, AuthProvider } from './AuthContext'
 
 const Wrapper = styled.nav`
   width: 100%;
@@ -75,19 +75,21 @@ const Navbar = (props) => {
                 <Logo><Link to="/">NailsReview</Link></Logo>
               </Left>
               <Right>
-                <Menu>
-                    { 
-                    isAuth ? 
-                    <Fragment>
-                      <li><Link to="/">Home</Link></li>
-                      <li><a onClick={logout}>Log Out</a></li>
-                    </Fragment> :
-                    <Fragment>
-                      <li><Link to="/login">Login</Link></li>
-                      <li><Link to="/register">Signup</Link></li>
-                    </Fragment>
-                  }
-                </Menu>
+                <AuthProvider>
+                  <Menu>
+                      { 
+                      isAuth ? 
+                      <Fragment>
+                        <li><Link to="/">Home</Link></li>
+                        <li ><a onClick={logout}>Log Out</a></li>
+                      </Fragment> :
+                      <Fragment>
+                        <li><Link to="/login">Login</Link></li>
+                        <li><Link to="/register">Signup</Link></li>
+                      </Fragment>
+                    }
+                  </Menu>
+                </AuthProvider>
               </Right>
             </Nav>  
           </Container>

@@ -1,7 +1,7 @@
 module Api
     module V1
       class AuthController < ApiController
-        before_action :authenticate, only: %i[logout]
+        # before_action :user, only: %i[logout]
   
         def create
           user = User.find_by(email: params[:user][:email])
@@ -15,22 +15,30 @@ module Api
         end
   
         def logout
-          reset_session
+          session[:user_id] = nil
+
+          # reset_session 
+
+          # session.delete(:user_id)
   
           render json: { logged_in: false }, status: 200
         end
 
-        def current_user
-          return nil unless session[:user_id]
+        # def current_user
+        #   return nil unless session[:user_id]
       
-          @current_user ||= User.find(session[:user_id])
-        end
+        #   current_user ||= User.find_by(id: session[:user_id])
+        
+        # end
   
         def logged_in
-          if current_user
-            render json: { email: current_user&.email, logged_in: true }, status: 200
+          user = User.find_by(id: session[:user_id])
+
+          if user
+            # session[:user_id] = current_user.id
+            render json: { email: user&.email, logged_in: true, user_id: session[:user_id] }, status: 200
           else
-            render json: { logged_in: false }, status: 200
+            render json: { logged_in: false }, status: :unauthorized
           end
         end
       end

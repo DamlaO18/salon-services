@@ -15,6 +15,5 @@ module Authable
       render json: { error: 'Access Denied' }, status: 401 unless current_user
     end
 
-    helper_method :current_user
-    
+
   end

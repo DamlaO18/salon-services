@@ -1,10 +1,16 @@
 class User < ApplicationRecord
-    has_secure_password
+  has_secure_password validations: false
 
   has_many :reviews
 
   validates_presence_of :email
   validates_uniqueness_of :email
+
+  def current_user
+    return nil unless session[:user_id]
+
+    @current_user ||= User.find(session[:user_id])
+  end
 
   # Generate a new password reset token for a user.
   #
